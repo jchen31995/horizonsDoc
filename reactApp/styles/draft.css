@@ -1,13 +1,11 @@
-.DraftEditor-root {
-    border-color: black;
-    border-width: medium;
+* {
+  box-sizing: border-box;
 }
-
-.DraftEditor-editorContainer {
-    border-color: black;
-    border-width: medium;
+#content {
+  width: 480px;
+  margin: 0 auto;
 }
-
-.test-class {
-  color: black;
+.editor {
+  border: 1px solid grey;
+  padding: 6px;
 }
