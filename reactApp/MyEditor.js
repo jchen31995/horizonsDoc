@@ -1,5 +1,5 @@
 var React = require('react');
-import {Editor, EditorState} from 'draft-js';
+import {Editor, EditorState, RichUtils} from 'draft-js';
 require('./styles/draft.css');
 
 class MyEditor extends React.Component {
