@@ -1,5 +1,8 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
+require('./styles/main.css');
+
+import EditPage from './components/editPage';
 
 /* This can check if your electron app can communicate with your backend */
 // fetch('http://localhost:3000')
@@ -7,5 +10,4 @@ var ReactDOM = require('react-dom');
 // .then(text => console.log(text))
 // .catch(err => {throw err})
 
-ReactDOM.render(<p>React lives!</p>,
-   document.getElementById('root'));
+ReactDOM.render(<EditPage />, document.getElementById('root'));
