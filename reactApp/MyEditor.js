@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 import {Editor, EditorState, RichUtils} from 'draft-js';
 require('./styles/draft.css');
 
@@ -9,13 +9,41 @@ class MyEditor extends React.Component {
     this.onChange = (editorState) => this.setState({editorState});
   };
 
+  _onBoldClick(){
+    this.onChange(RichUtils.toggleInlineStyle(
+      this.state.editorState,
+      'BOLD'
+    ));
+    console.log(this.state.editorState);
+  }
+
+  _onItalClick(){
+    this.onChange(RichUtils.toggleInlineStyle(
+      this.state.editorState,
+      'ITALIC'
+    ));
+  }
+
+  _onULClick(){
+    this.onChange(RichUtils.toggleInlineStyle(
+      this.state.editorState,
+      'UNDERLINE'
+    ));
+  }
+
   render() {
     return (
-        <Editor editorState={this.state.editorState} onChange={this.onChange} />
+      <div id="content">
+        <h1>This is the text editor</h1>
+          <button onClick={this._onBoldClick.bind(this)}><strong>Bold</strong></button>
+          <button onClick={this._onItalClick.bind(this)}><em>Italicize</em></button>
+          <button onClick={this._onULClick.bind(this)}>Underline</button>
+          <div className="editor">
+            <Editor editorState={this.state.editorState} onChange={this.onChange}/>
+          </div>
+      </div>
     );
   }
 }
 
-module.exports = {
-  MyEditor
-}
+export default MyEditor;
