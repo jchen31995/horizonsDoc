@@ -15,12 +15,22 @@ import MyEditor from './MyEditor';
 class Board extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      document: {
+        id: "abcdefghijklmnopqrstuvwxyz"
+        title: "sampleDocument",
+        userID,
+        password,
+        collaborators,
+        
+        content
+      }
+    };
   }
   render() {
     return (
       <div>
-        <p> test test </p>
+        <h2></h2>
         <MyEditor editorState={this.state.editorState} onChange={this.onChange} />
       </div>
     );
