@@ -4,6 +4,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MyEditor from './MyEditor';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { saveRawContent } from '../models/mongoFun'
+
 // require('draft-js/dist/draft.css');
 
 /* This can check if your electron app can communicate with your backend */
@@ -20,17 +23,25 @@ class Board extends React.Component {
         _id: "abcdefghijklmnopqrstuvwxyz",
         title: "sampleDocument",
         userID: "abcdefghijklmnopqrstuvwxyz",
-        password: "123",
-        collaborators: ["user1", "user2"],
-        content: {}
+        collaboratorIDs: ["ID1", "ID2"],
+        rawContent: ""
       }
     };
   }
+
+  saveDoc(editorState){
+    const rawContent = convertToRaw(editorState.getCurrentContent());
+    this.setState({rawContent: rawContent});
+    saveRawContent(this.state.document._id, this.state.document.rawContent);
+  }
+
+
   render() {
     return (
       <div>
-        <h2></h2>
-        <MyEditor />
+        <h2>{this.state.document.title}</h2>
+        <p>Collabortors: {this.state.document.collaborators.toString()}</p>
+        <MyEditor saveDoc={this.saveDoc.bind(this)} />
       </div>
     );
   }
