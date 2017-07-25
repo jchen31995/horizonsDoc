@@ -9,6 +9,11 @@ class MyEditor extends React.Component {
     this.onChange = (editorState) => this.setState({editorState});
   };
 
+  _onSaveClick(){
+    const contentState = this.state.editorState.getCurrentContent();
+    this.props.saveDoc(contentState);
+  }
+
   _onBoldClick(){
     this.onChange(RichUtils.toggleInlineStyle(
       this.state.editorState,
@@ -35,6 +40,9 @@ class MyEditor extends React.Component {
     return (
       <div id="content">
         <h1>This is the text editor</h1>
+          <button onClick={this._onSaveClick.bind(this)}>
+            Save
+          </button> <br/> <br/>
           <button onClick={this._onBoldClick.bind(this)}><strong>Bold</strong></button>
           <button onClick={this._onItalClick.bind(this)}><em>Italicize</em></button>
           <button onClick={this._onULClick.bind(this)}>Underline</button>
