@@ -17,20 +17,15 @@ class Board extends React.Component {
     super(props);
     this.state = {
       document: {
-        id: "abcdefghijklmnopqrstuvwxyz"
-        title: "sampleDocument",
-        userID,
-        password,
-        collaborators,
-        
-        content
+        id: "abcdefghijklmnopqrstuvwxyz",
+        title: "sampleDocument"
       }
     };
   }
   render() {
     return (
       <div>
-        <h2></h2>
+        <h1>This is the text editor</h1>
         <MyEditor editorState={this.state.editorState} onChange={this.onChange} />
       </div>
     );

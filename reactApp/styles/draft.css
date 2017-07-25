@@ -1,11 +1,29 @@
 * {
   box-sizing: border-box;
 }
-#content {
+
+
+.textBox {
   width: 480px;
   margin: 0 auto;
+  box-sizing: border-box;
+  
 }
 .editor {
   border: 1px solid grey;
   padding: 6px;
+}
+
+
+
+.right-align {
+	text-align: right;
+}
+
+.left-align {
+	text-align: left;
+}
+
+.center-align {
+	text-align: center;
 }
