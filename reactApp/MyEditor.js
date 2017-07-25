@@ -10,7 +10,8 @@ class MyEditor extends React.Component {
   };
 
   _onSaveClick(){
-    this.props.saveDoc(this.state.editorState);
+    const contentState = this.state.editorState.getCurrentContent();
+    this.props.saveDoc(contentState);
   }
 
   _onBoldClick(){
@@ -41,7 +42,7 @@ class MyEditor extends React.Component {
         <h1>This is the text editor</h1>
           <button onClick={this._onSaveClick.bind(this)}>
             Save
-          </button>
+          </button> <br/> <br/>
           <button onClick={this._onBoldClick.bind(this)}><strong>Bold</strong></button>
           <button onClick={this._onItalClick.bind(this)}><em>Italicize</em></button>
           <button onClick={this._onULClick.bind(this)}>Underline</button>
