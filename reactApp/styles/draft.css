@@ -16,17 +16,20 @@
 }
 
 .dropdown__trigger {
-    border: 1px solid grey;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 16px;
     background-color: rgba(192,192,192,0.1);
+    font-size: 90%
 }
 
 .dropdown__content {
     display: none;
     position: absolute;
     border: 1px solid grey;
+    background-color: rgba(192,192,192,0.1);
+    margin-right: 100px;
 }
 
 .dropdown--active .dropdown__content {
-    display: block;
+    display: inline-block;
 }

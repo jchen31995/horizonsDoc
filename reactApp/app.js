@@ -4,6 +4,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MyEditor from './MyEditor';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 // require('draft-js/dist/draft.css');
 
 /* This can check if your electron app can communicate with your backend */
@@ -31,7 +34,9 @@ class Board extends React.Component {
     return (
       <div>
         <h2></h2>
-        <MyEditor editorState={this.state.editorState} onChange={this.onChange} />
+        <MuiThemeProvider>
+          <MyEditor editorState={this.state.editorState} onChange={this.onChange} />
+        </MuiThemeProvider>
       </div>
     );
   }
