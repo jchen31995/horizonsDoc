@@ -16,15 +16,15 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      document: {
-        id: "abcdefghijklmnopqrstuvwxyz"
-        title: "sampleDocument",
-        userID,
-        password,
-        collaborators,
-        
-        content
-      }
+      // document: {
+      //   id: "abcdefghijklmnopqrstuvwxyz",
+      //   title: "sampleDocument",
+      //   userID,
+      //   password,
+      //   collaborators,
+      //
+      //   content
+      // }
     };
   }
   render() {
