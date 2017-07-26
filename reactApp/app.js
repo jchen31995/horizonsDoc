@@ -4,7 +4,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MyEditor from './MyEditor';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+
+injectTapEventPlugin();
 
 // require('draft-js/dist/draft.css');
 
@@ -51,15 +56,17 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <h1>This is the text editor</h1>
+        <h2>Text Editor</h2>
         <p>Sharable documentID: {this.state.document._id}</p>
         <p>Collaborators: {this.state.document.collaboratorIDs.toString()}</p>
-        <MyEditor saveDoc={this.saveDoc.bind(this)} />
+        <MyEditor editorState={this.state.editorState} onChange={this.onChange} />
       </div>
     );
   }
 }
 
 
-ReactDOM.render(<Board />,
+ReactDOM.render(<MuiThemeProvider>
+    <Board />
+  </MuiThemeProvider>,
    document.getElementById('root'));
