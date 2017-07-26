@@ -35,13 +35,18 @@
     "webpack-dev-server": "^2.6.0"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "classnames": "^2.2.5",
     "draft-js": "^0.10.1",
     "express": "^4.15.3",
+    "immutable": "^3.8.1",
     "material-ui": "^0.18.7",
+    "mongoose": "^4.11.4",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
+    "react-color": "^2.13.4",
     "react-dom": "^15.6.1",
-    "react-simple-dropdown": "^3.0.0"
+    "react-simple-dropdown": "^3.0.0",
+    "react-tap-event-plugin": "^2.0.1"
   }
 }
