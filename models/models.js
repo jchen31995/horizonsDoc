@@ -7,7 +7,7 @@ mongoose.connect(process.env.MONGODB_URI);
 
 // mongodb schema
 var userSchema = mongoose.Schema({
-	name: String,
+	username: String,
 	password: String
 });
 

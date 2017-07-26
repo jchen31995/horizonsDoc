@@ -1,65 +1,45 @@
-// var React = require('react');
-// var ReactDOM = require('react-dom');
-// var { MyEditor } = require('./MyEditor');
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MyEditor from './MyEditor';
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { HashRouter, Route } from 'react-router-dom'
 
-// require('draft-js/dist/draft.css');
+import DocumentEditor from './components/DocumentEditor';
+import DocumentPortal from './components/DocumentPortal';
+import Login from './components/Login';
 
-/* This can check if your electron app can communicate with your backend */
-// fetch('http://localhost:3000')
-// .then(resp => resp.text())
-// .then(text => console.log(text))
-// .catch(err => {throw err})
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
-class Board extends React.Component {
+injectTapEventPlugin();
+
+// use axios for authenticated requests
+
+// use hash router
+
+// https://github.com/gsmith98/Quonvo
+
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      document: {
-        _id: "5977b384a943ca3e78a7112a",
-        title: "sampleDocument",
-        userID: "abcdefghijklmnopqrstuvwxyz",
-        collaboratorIDs: [],
-        rawContent: {}
-      }
-    };
-  };
-
-  saveDoc(contentState){
-    const rawContent = convertToRaw(contentState);
-    const newDoc = this.state.document;
-    newDoc.rawContent = rawContent;
-    this.setState({document: newDoc});
-    fetch('http://localhost:3000/updateDoc', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.document)
-    }).then(function(response) {
-      return response.json()
-    }).then(function(json) {
-        console.log("save successful! JSON response:", json);
-    }).catch(function(e) {
-        console.log('ERROR in function saveDoc: ', e);
-    });
+      };
   };
 
   render() {
     return (
-      <div>
-        <h1>This is the text editor</h1>
-        <p>Sharable documentID: {this.state.document._id}</p>
-        <p>Collaborators: {this.state.document.collaboratorIDs.toString()}</p>
-        <MyEditor saveDoc={this.saveDoc.bind(this)} />
-      </div>
+      <HashRouter basename="/">
+        <div>
+          <Route exact={true} path="/" component={DocumentEditor} />
+          {/* <Route path="/DocumentEditor" component={DocumentEditor} /> */}
+          <Route path="/DocumentPortal" component={DocumentPortal} />
+          <Route path="/Login" component={Login} />
+        </div>
+      </HashRouter>
     );
   }
 }
 
 
-ReactDOM.render(<Board />,
+ReactDOM.render(<MuiThemeProvider>
+    <App />
+  </MuiThemeProvider>,
    document.getElementById('root'));
