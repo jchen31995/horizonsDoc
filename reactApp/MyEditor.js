@@ -1,32 +1,41 @@
 import React from 'react';
 import {Editor, EditorState, RichUtils, Modifier, DefaultDraftBlockRenderMap} from 'draft-js';
 import Immutable from 'immutable';
+import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
+import * as colors from 'material-ui/styles/colors';
+import AppBar from 'material-ui/AppBar';
+import FontIcon from 'material-ui/FontIcon';
+import RaisedButton from 'material-ui/RaisedButton';
+import Popover from 'material-ui/Popover';
+
+import { CompactPicker } from 'react-color';
+// console.log(Dropdown.DropdownTrigger);
+// const DropdownTrigger = Dropdown.DropdownTrigger;
+// const DropdownContent = Dropdown.DropdownContent;
+
 require('./styles/draft.css');
 
-const styleMap = {
-  'JAMES': {
-    color: 'green'
-  }
-};
 
+const styleMap = {
+  'STRIKETHROUGH': {
+    textDecoration: 'line-through'
+  }
+}
 
 const blockRenderMap = Immutable.Map({
-  'center': {
+  'CENTER': {
     element: 'center'
-  }, 
+  },
   'unstyled': {
     element: 'div'
   },
-  'right': {
+  'RIGHT': {
     element: 'div'
   },
-  'left': {
+  'LEFT': {
     element: 'div'
   }
 });
-
-const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
-
 
 const myBlockStyleFn = function(contentBlock) {
   const type = contentBlock.getType();
@@ -43,11 +52,12 @@ const myBlockStyleFn = function(contentBlock) {
   }
 }
 
-
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {editorState: EditorState.createEmpty()};
+    this.state = {
+      editorState: EditorState.createEmpty()
+    };
     this.onChange = (editorState) => {this.setState({editorState});}
   };
 
@@ -56,69 +66,108 @@ class MyEditor extends React.Component {
     this.props.saveDoc(contentState);
   }
 
-
-  _onBoldClick(){
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,
-      'BOLD'
-    ));
+  toggleColorPicker(e) {
+    this.setState({
+      colorPickerOpen: true,
+      colorPickerButton: e.target
+    });
+    
+  toggleInlineFormat(e, style){
+    e.preventDefault();
+    this.setState({
+      editorState: RichUtils.toggleInlineStyle(this.state.editorState, style)
+    })
   }
 
-  _onItalClick(){
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,
-      'ITALIC'
-    ));
+  toggleBlockFormat(e, blockType){
+    e.preventDefault();
+    this.setState({
+      editorState: RichUtils.toggleBlockType(this.state.editorState, blockType)
+    })
   }
 
-  _onULClick(){
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,
-      'UNDERLINE'
-    ));
+  alignButton({icon, blockType}){
+    return (
+      <RaisedButton
+        backgroundColor={
+          this.state.editorState.getBlockTree(blockType) ?
+          colors.faintBlack :
+          colors.white
+        }
+        onMouseDown={(e) => this.toggleBlockFormat(e, blockType)}
+        icon={<FontIcon className="material-icons">{icon}</FontIcon>}
+      />
+    )
   }
 
-  _onStrikethroughClick(){
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,
-      'STRIKETHROUGH'))
+  formatButton({icon, style}){
+    return (
+      <RaisedButton
+        backgroundColor={
+          this.state.editorState.getCurrentInlineStyle().has(style) ?
+          colors.faintBlack :
+          colors.white
+        }
+        onMouseDown={(e) => this.toggleInlineFormat(e, style)}
+        icon={<FontIcon className="material-icons">{icon}</FontIcon>}
+      />
+    )
+}
+
+  formatColor(color) {
+    console.log('COLOR IS', color);
+
+    var newInlineStyles = Object.assign(
+      {},
+      this.state.inlineStyles,
+      {
+        [color.hex]: {
+          color: color.hex,
+        }
+      }
+    );
+
+    this.setState({
+      inlineStyles: newInlineStyles,
+      editorState: RichUtils.toggleInlineStyle(this.state.editorState, color.hex)
+    })
+  };
+
+  openColorPicker(e) {
+    this.setState({
+      colorPickerOpen: true,
+      colorPickerButton: e.target
+    })
+  };
+
+  closeColorPicker() {
+    this.setState({
+      colorPickerOpen: false
+    })
   }
 
-  _onCodeClick(){
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,
-      'CODE'
-    ));
+colorPicker() {
+    return(
+      <div style={{display: 'inline-block'}}>
+      <RaisedButton
+        backgroundColor={colors.white}
+        icon={<FontIcon className="material-icons">color_lens</FontIcon>}
+        onClick={this.openColorPicker.bind(this)}
+      />
+      <Popover
+        open={this.state.colorPickerOpen}
+        anchorEl={this.state.colorPickerButton}
+        anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        onRequestClose={this.closeColorPicker.bind(this)}
+      >
+        <CompactPicker onChangeComplete={this.formatColor.bind(this)}/>
+      </Popover>
+      </div>
+    )
   }
 
-    _onColorClick(){
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,
-      'JAMES'))
-  }
-
-  _onLeftAlign(){
-    this.onChange(RichUtils.toggleBlockType(
-      this.state.editorState,
-      'left'
-    ));
-  }
-
-
-  _onRightAlign(){
-    this.onChange(RichUtils.toggleBlockType(
-      this.state.editorState,
-      'right'
-      ));
-  } 
-
-  _onCenterAlign(){
-    this.onChange(RichUtils.toggleBlockType(
-      this.state.editorState,
-      'center'))
-  }
-
-  _onBulletClick(){
+_onBulletClick(){
       this.onChange(RichUtils.toggleBlockType(
         this.state.editorState,
         'unordered-list-item'
@@ -132,31 +181,31 @@ class MyEditor extends React.Component {
     ));
   }
 
-
-
-
   render() {
     return (
       <div id="content">
-        <div id="navbar">
-        <h1>This is the text editor</h1>
-          <button onClick={this._onSaveClick.bind(this)}>
-            Save
-          </button> <br/> <br/>
-          <button onClick={this._onBoldClick.bind(this)}><strong>Bold</strong></button>
-          <button onClick={this._onItalClick.bind(this)}><em>Italicize</em></button>
-          <button onClick={this._onULClick.bind(this)}>Underline</button>
-          <button onClick={this._onStrikethroughClick.bind(this)}>Strikethrough</button>
-          <button onClick={this._onColorClick.bind(this)}>Color</button>
-          <button onClick={this._onLeftAlign.bind(this)}>Left Align</button>
-          <button onClick={this._onCenterAlign.bind(this)}>Center Align</button>
-          <button onClick={this._onRightAlign.bind(this)}>Right Align</button>
-          <button onClick={this._onBulletClick.bind(this)}>Bulleted</button>
-          <button onClick={this._onNumberedClick.bind(this)}>Numbered List</button>
-          <button onClick={this._onCodeClick.bind(this)}>Code</button>
+      <AppBar title = "Best Docs"/>
+        <div className = "toolbar">
+          {this.formatButton({icon: 'format_bold', style:'BOLD'})}
+          {this.formatButton({icon: 'format_italic', style:'ITALIC' })}
+          {this.formatButton({icon: 'format_underline', style:'UNDERLINE'})}
+          {this.formatButton({icon: 'format_strikethrough', style:'STRIKETHROUGH'})}
+          {this.formatButton({icon: 'save'})}
+          {this.alignButton({icon: 'format_align_center', blockType:'center'})}
+          {this.alignButton({icon: 'format_align_left', blockType:'left'})}
+          {this.alignButton({icon: 'format_align_right', blockType:'right'})}
+          {this.colorPicker()}
         </div>
+
         <div className="editor">
-          <Editor editorState={this.state.editorState} blockStyleFn={myBlockStyleFn} blockRenderMap={extendedBlockRenderMap} customStyleMap={styleMap} onChange={this.onChange} />
+          <Editor
+            editorState={this.state.editorState}
+            spellcheck={true}
+            blockStyleFn={myBlockStyleFn}
+            blockRenderMap={blockRenderMap}
+            customStyleMap={styleMap}
+            onChange={this.onChange}
+          />
         </div>
       </div>
     );

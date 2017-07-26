@@ -2,19 +2,30 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: rgba(211,211,211,0.25)
+}
+#content {
+ width: 480px;
+ margin: 0 auto;
+}
 
 .textBox {
   width: 480px;
   margin: 0 auto;
   box-sizing: border-box;
-  
+
 }
 .editor {
   border: 1px solid grey;
   padding: 6px;
+  background-color: white;
+  box-shadow: 2px 2px 2px gray;
 }
 
-
+.toolbar {
+  border-bottom: 1px solid gray;
+}
 
 .right-align {
 	text-align: right;
