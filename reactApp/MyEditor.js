@@ -40,9 +40,6 @@ const blockRenderMap = Immutable.Map({
 const myBlockStyleFn = function(contentBlock) {
   const type = contentBlock.getType();
   switch (type) {
-    case 'unstyled': {
-      return 'boo';
-    }
     case 'right': {
       return 'right-align';
     }
@@ -74,8 +71,7 @@ class MyEditor extends React.Component {
       colorPickerOpen: true,
       colorPickerButton: e.target
     });
-  }
-
+    
   toggleInlineFormat(e, style){
     e.preventDefault();
     this.setState({
@@ -116,7 +112,7 @@ class MyEditor extends React.Component {
         icon={<FontIcon className="material-icons">{icon}</FontIcon>}
       />
     )
-  }
+}
 
   formatColor(color) {
     console.log('COLOR IS', color);
@@ -150,7 +146,7 @@ class MyEditor extends React.Component {
     })
   }
 
-  colorPicker() {
+colorPicker() {
     return(
       <div style={{display: 'inline-block'}}>
       <RaisedButton
@@ -170,10 +166,25 @@ class MyEditor extends React.Component {
       </div>
     )
   }
+
+_onBulletClick(){
+      this.onChange(RichUtils.toggleBlockType(
+        this.state.editorState,
+        'unordered-list-item'
+      ));
+  }
+
+  _onNumberedClick(){
+    this.onChange(RichUtils.toggleBlockType(
+      this.state.editorState,
+      'ordered-list-item'
+    ));
+  }
+
   render() {
     return (
       <div id="content">
-        <AppBar title = "Best Docs"/>
+      <AppBar title = "Best Docs"/>
         <div className = "toolbar">
           {this.formatButton({icon: 'format_bold', style:'BOLD'})}
           {this.formatButton({icon: 'format_italic', style:'ITALIC' })}

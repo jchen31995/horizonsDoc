@@ -9,7 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /reactApp\/(.)*\.js$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       {
-        test: /\.s?css$/, loader: 'style-loader!css-loader'
+        test: /\.css$/, loader: 'style-loader!css-loader'
       }
     ]
   },
@@ -28,4 +28,3 @@ module.exports = {
   },
   devtool: 'source-map'
 };
-  
