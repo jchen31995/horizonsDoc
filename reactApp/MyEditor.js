@@ -23,16 +23,16 @@ const styleMap = {
 }
 
 const blockRenderMap = Immutable.Map({
-  'CENTER': {
+  'center': {
     element: 'center'
   },
   'unstyled': {
     element: 'div'
   },
-  'RIGHT': {
+  'right': {
     element: 'div'
   },
-  'LEFT': {
+  'left': {
     element: 'div'
   }
 });
@@ -71,7 +71,8 @@ class MyEditor extends React.Component {
       colorPickerOpen: true,
       colorPickerButton: e.target
     });
-    
+  }
+
   toggleInlineFormat(e, style){
     e.preventDefault();
     this.setState({
@@ -167,11 +168,11 @@ colorPicker() {
     )
   }
 
-_onBulletClick(){
-      this.onChange(RichUtils.toggleBlockType(
-        this.state.editorState,
-        'unordered-list-item'
-      ));
+  _onBulletClick(){
+    this.onChange(RichUtils.toggleBlockType(
+      this.state.editorState,
+      'unordered-list-item'
+    ));
   }
 
   _onNumberedClick(){
@@ -190,7 +191,11 @@ _onBulletClick(){
           {this.formatButton({icon: 'format_italic', style:'ITALIC' })}
           {this.formatButton({icon: 'format_underline', style:'UNDERLINE'})}
           {this.formatButton({icon: 'format_strikethrough', style:'STRIKETHROUGH'})}
-          {this.formatButton({icon: 'save'})}
+          <RaisedButton
+            backgroundColor={colors.white}
+            icon={<FontIcon className="material-icons">save</FontIcon>}
+            onClick={this._onSaveClick.bind(this)}
+          />
           {this.alignButton({icon: 'format_align_center', blockType:'center'})}
           {this.alignButton({icon: 'format_align_left', blockType:'left'})}
           {this.alignButton({icon: 'format_align_right', blockType:'right'})}
