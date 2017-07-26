@@ -4,9 +4,6 @@ import Immutable from 'immutable';
 require('./styles/draft.css');
 
 const styleMap = {
-  'STRIKETHROUGH': {
-    textDecoration: 'line-through',
-  },
   'JAMES': {
     color: 'green'
   }
@@ -28,14 +25,12 @@ const blockRenderMap = Immutable.Map({
   }
 });
 
+const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
 
 const myBlockStyleFn = function(contentBlock) {
   const type = contentBlock.getType();
   switch (type) {
-    case 'unstyled': {
-        return 'boo';
-    }
     case 'right': {
       return 'right-align';
     }
@@ -61,8 +56,8 @@ class MyEditor extends React.Component {
     this.props.saveDoc(contentState);
   }
 
-  _onBoldClick(){
 
+  _onBoldClick(){
     this.onChange(RichUtils.toggleInlineStyle(
       this.state.editorState,
       'BOLD'
@@ -87,6 +82,13 @@ class MyEditor extends React.Component {
     this.onChange(RichUtils.toggleInlineStyle(
       this.state.editorState,
       'STRIKETHROUGH'))
+  }
+
+  _onCodeClick(){
+    this.onChange(RichUtils.toggleInlineStyle(
+      this.state.editorState,
+      'CODE'
+    ));
   }
 
     _onColorClick(){
@@ -116,6 +118,19 @@ class MyEditor extends React.Component {
       'center'))
   }
 
+  _onBulletClick(){
+      this.onChange(RichUtils.toggleBlockType(
+        this.state.editorState,
+        'unordered-list-item'
+      ));
+  }
+
+  _onNumberedClick(){
+    this.onChange(RichUtils.toggleBlockType(
+      this.state.editorState,
+      'ordered-list-item'
+    ));
+  }
 
 
 
@@ -136,10 +151,12 @@ class MyEditor extends React.Component {
           <button onClick={this._onLeftAlign.bind(this)}>Left Align</button>
           <button onClick={this._onCenterAlign.bind(this)}>Center Align</button>
           <button onClick={this._onRightAlign.bind(this)}>Right Align</button>
-         
+          <button onClick={this._onBulletClick.bind(this)}>Bulleted</button>
+          <button onClick={this._onNumberedClick.bind(this)}>Numbered List</button>
+          <button onClick={this._onCodeClick.bind(this)}>Code</button>
         </div>
         <div className="editor">
-          <Editor editorState={this.state.editorState} blockStyleFn={myBlockStyleFn} blockRenderMap={blockRenderMap} customStyleMap={styleMap} onChange={this.onChange} />
+          <Editor editorState={this.state.editorState} blockStyleFn={myBlockStyleFn} blockRenderMap={extendedBlockRenderMap} customStyleMap={styleMap} onChange={this.onChange} />
         </div>
       </div>
     );

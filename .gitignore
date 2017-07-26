@@ -1,4 +1,4 @@
-webpack.config.js  
+ 
 
 # Logs
 logs
@@ -58,3 +58,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+webpack.config.js 
+
