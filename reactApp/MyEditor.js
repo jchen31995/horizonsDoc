@@ -15,13 +15,6 @@ import { CompactPicker } from 'react-color';
 
 require('./styles/draft.css');
 
-
-const styleMap = {
-  'STRIKETHROUGH': {
-    textDecoration: 'line-through'
-  }
-}
-
 const blockRenderMap = Immutable.Map({
   'center': {
     element: 'center'
@@ -36,6 +29,8 @@ const blockRenderMap = Immutable.Map({
     element: 'div'
   }
 });
+
+const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
 const myBlockStyleFn = function(contentBlock) {
   const type = contentBlock.getType();
@@ -56,7 +51,9 @@ class MyEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(),
+      currFontSize: 8,
+      styleMap: {} 
     };
     this.onChange = (editorState) => {this.setState({editorState});}
   };
@@ -87,7 +84,7 @@ class MyEditor extends React.Component {
     })
   }
 
-  alignButton({icon, blockType}){
+  blockTypeButton({icon, blockType}){
     return (
       <RaisedButton
         backgroundColor={
@@ -182,6 +179,7 @@ colorPicker() {
     ));
   }
 
+
   render() {
     return (
       <div id="content">
@@ -191,14 +189,17 @@ colorPicker() {
           {this.formatButton({icon: 'format_italic', style:'ITALIC' })}
           {this.formatButton({icon: 'format_underline', style:'UNDERLINE'})}
           {this.formatButton({icon: 'format_strikethrough', style:'STRIKETHROUGH'})}
+
           <RaisedButton
             backgroundColor={colors.white}
             icon={<FontIcon className="material-icons">save</FontIcon>}
             onClick={this._onSaveClick.bind(this)}
           />
-          {this.alignButton({icon: 'format_align_center', blockType:'center'})}
-          {this.alignButton({icon: 'format_align_left', blockType:'left'})}
-          {this.alignButton({icon: 'format_align_right', blockType:'right'})}
+          {this.blockTypeButton({icon: 'format_align_center', blockType:'center'})}
+          {this.blockTypeButton({icon: 'format_align_left', blockType:'left'})}
+          {this.blockTypeButton({icon: 'format_align_right', blockType:'right'})}
+          {this.blockTypeButton({icon: 'format_list_numbered', blockType:'ordered-list-item'})}
+          {this.blockTypeButton({icon: 'format_list_bulleted', blockType:'unordered-list-item'})}
           {this.colorPicker()}
         </div>
 
@@ -207,8 +208,8 @@ colorPicker() {
             editorState={this.state.editorState}
             spellcheck={true}
             blockStyleFn={myBlockStyleFn}
-            blockRenderMap={blockRenderMap}
-            customStyleMap={styleMap}
+            blockRenderMap={extendedBlockRenderMap}
+            customStyleMap={this.state.styleMap}
             onChange={this.onChange}
           />
         </div>
