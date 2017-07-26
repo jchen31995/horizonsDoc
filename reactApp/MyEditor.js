@@ -13,7 +13,7 @@ import { CompactPicker } from 'react-color';
 // const DropdownTrigger = Dropdown.DropdownTrigger;
 // const DropdownContent = Dropdown.DropdownContent;
 
-require('../styles/draft.css');
+require('./styles/draft.css');
 
 const blockRenderMap = Immutable.Map({
   'center': {
@@ -117,7 +117,7 @@ class MyEditor extends React.Component {
 
     var newInlineStyles = Object.assign(
       {},
-      this.state.styleMap,
+      this.state.inlineStyles,
       {
         [color.hex]: {
           color: color.hex,
@@ -126,7 +126,7 @@ class MyEditor extends React.Component {
     );
 
     this.setState({
-      styleMap: newInlineStyles,
+      inlineStyles: newInlineStyles,
       editorState: RichUtils.toggleInlineStyle(this.state.editorState, color.hex)
     })
   };
@@ -179,13 +179,12 @@ colorPicker() {
     ));
   }
 
-  _changeFontSize(zooma){
-    var newFontSize = this.state.currFontSize + (zooma ? -40 : 40)
+  _changeFontSize(){
+    var newFontSize = this.state.currFontSize + 40
 
-    var newStyleMap = Object.assign(
+    var newStyleMap = Object.assign({},this.state.styleMap,
       {},
-      this.state.styleMap,
-      {[newFontSize]: {fontSize: `${newFontSize}px`}}
+      [newFontSize]: {fontSize: `${newFontSize}px`}
     )
 
     this.setState({
@@ -197,15 +196,15 @@ colorPicker() {
 
 
 
-  applyfontSize(zooma){
+  applyfontSize(){
     return (
+      console.log("HI")
       <div style={{display: 'inline-block'}}>
-        <RaisedButton
-          backgroundColor={colors.white}
-          icon={<FontIcon className="material-icons"> {zooma ? 'zoom_out' : 'zoom_in'}</FontIcon>}
-          onMouseDown={() => this._changeFontSize(zooma)}
-        />
-      </div>
+      <RaisedButton
+        backgroundColor={colors.white}
+        icon={<FontIcon className="material-icons">zoom_in</FontIcon>}
+        onClick={this._changeColorPicker.bind(this)}
+      />
       )
   }
 
@@ -230,8 +229,8 @@ colorPicker() {
           {this.blockTypeButton({icon: 'format_list_numbered', blockType:'ordered-list-item'})}
           {this.blockTypeButton({icon: 'format_list_bulleted', blockType:'unordered-list-item'})}
           {this.colorPicker()}
-          {this.applyfontSize(false)}
-          {this.applyfontSize(true)}
+          {this.applyfontSize()}
+          {this.blockTypeButton({icon: 'format_list_bulleted', blockType:'unordered-list-item'})}
         </div>
 
         <div className="editor">
