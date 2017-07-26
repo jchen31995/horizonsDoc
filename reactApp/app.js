@@ -59,7 +59,8 @@ class Board extends React.Component {
         <h2>Text Editor</h2>
         <p>Sharable documentID: {this.state.document._id}</p>
         <p>Collaborators: {this.state.document.collaboratorIDs.toString()}</p>
-        <MyEditor editorState={this.state.editorState} onChange={this.onChange} />
+        <MyEditor saveDoc={this.saveDoc.bind(this)} />
+        {/* <MyEditor editorState={this.state.editorState} onChange={this.onChange} /> */}
       </div>
     );
   }
