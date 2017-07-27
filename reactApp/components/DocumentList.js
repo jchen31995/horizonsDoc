@@ -29,7 +29,11 @@ class DocumentList extends React.Component {
     }).catch(function(e) {
         console.log('ERROR in function componentDidMount: ', e);
     });
-  }
+  };
+
+  docClick(docID) {
+    this.props.navigateToEditor(docID);
+  };
 
   render() {
     return (
@@ -38,6 +42,7 @@ class DocumentList extends React.Component {
           {this.state.docList.map(
             doc=>
               <ListItem
+                onTouchTap={this.docClick.bind(this, doc._id)}
                 leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
                 // rightIcon={<ActionInfo />}
                 primaryText={doc.title}
@@ -46,9 +51,6 @@ class DocumentList extends React.Component {
               />
           )}
         </List>
-        <ul >
-
-        </ul>
       </div>
     );
   }
