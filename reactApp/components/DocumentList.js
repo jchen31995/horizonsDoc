@@ -1,6 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 
+import {List, ListItem} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import ActionAssignment from 'material-ui/svg-icons/action/assignment';
+import {blue500, yellow600} from 'material-ui/styles/colors';
+import ActionInfo from 'material-ui/svg-icons/action/info';
+
 class DocumentList extends React.Component {
   constructor(props) {
     super(props);
@@ -28,8 +34,20 @@ class DocumentList extends React.Component {
   render() {
     return (
       <div>
-        <ul>
-          {this.state.docList.map(doc=><li key={doc._id}>{doc.title}</li>)}
+        <List>
+          {this.state.docList.map(
+            doc=>
+              <ListItem
+                leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
+                // rightIcon={<ActionInfo />}
+                primaryText={doc.title}
+                secondaryText={"Shareable ID: "+doc._id}
+                key={doc._id}
+              />
+          )}
+        </List>
+        <ul >
+
         </ul>
       </div>
     );

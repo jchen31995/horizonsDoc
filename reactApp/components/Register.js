@@ -35,7 +35,6 @@ class Register extends React.Component {
 
   submitForm(data) {
     const self = this;
-    console.log("you just submitted data: ", JSON.stringify(data));
     axios({
       method: 'post',
       url: 'http://localhost:3000/signup',
@@ -44,7 +43,7 @@ class Register extends React.Component {
       if(response.data.success){
         self.props.history.push('/Login');
       } else {
-        alert("Registration unsuccessful!", response.data.error);
+        alert("Registration unsuccessful! " + response.data.error);
       };
     }).catch(function(e) {
         console.log('ERROR in function submitForm: ', e);
