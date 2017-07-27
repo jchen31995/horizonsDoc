@@ -4,11 +4,18 @@ var { User } = require('../mongodb/models');
 module.exports = function(passport) {
   router.post('/signup', function(req, res){
     if(req.body.username && req.body.password) {
-      var u = new User({
-        username: req.body.username,
-        password: req.body.password
-      });
-      u.save()
+      User.find({username: req.body.username}).exec()
+      .then(function(mongoUser){
+        if(mongoUser){
+          res.json({success: false, error: "username already exists!"});
+        } else {
+          var u = new User({
+            username: req.body.username,
+            password: req.body.password
+          });
+          return u.save()
+        };
+      })
       .then(function(u){
         res.json({success: true, user: u});
       })

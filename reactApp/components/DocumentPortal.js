@@ -27,7 +27,7 @@ class DocumentPortal extends React.Component {
         alert("Logout unsuccessful!");
       };
     }).catch(function(e) {
-        console.log('ERROR in function submitForm: ', e);
+        console.log('ERROR in function clickLogOut: ', e);
     });
   };
 
@@ -36,7 +36,7 @@ class DocumentPortal extends React.Component {
       <div>
         <h2>Documents Portal</h2>
         <RaisedButton
-          style={{marginTop: 32}}
+          style={{marginBottom: '24px'}}
           onClick={this.clickLogOut.bind(this)}
           label="Logout"
         />
