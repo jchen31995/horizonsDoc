@@ -31,18 +31,27 @@ class DocumentPortal extends React.Component {
     });
   };
 
+  navigateToEditor(docID) {
+    this.props.history.push('/editDoc/' + docID);
+  }
+
+  navigateToNewDoc() {
+    this.props.history.push('/createNewDoc');
+  }
+
   render() {
     return (
       <div>
         <h2>Documents Portal</h2>
+        <CreateDoc navigateToNewDoc={this.navigateToNewDoc.bind(this)} />
+        <DocumentList navigateToEditor={this.navigateToEditor.bind(this)} />
+        <AddSharedDoc />
         <RaisedButton
-          style={{marginBottom: '24px'}}
+          style={{marginTop: '30px'}}
           onClick={this.clickLogOut.bind(this)}
           label="Logout"
+          secondary={true}
         />
-        <CreateDoc />
-        <DocumentList />
-        <AddSharedDoc />
       </div>
     );
   }

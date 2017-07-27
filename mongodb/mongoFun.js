@@ -42,7 +42,35 @@ const getDocList = function(callback){
   });
 }
 
+const getOneDoc = function(docID, callback){
+  Document.findById(docID).exec()
+  .then(function(doc){
+    callback(doc);
+  })
+  .catch(function(e) {
+    console.log("ERROR in function getOneDoc:", e);
+  });
+}
+
+const createNewDoc = function(userID, callback){
+  const newDoc = new Document({
+    title: "new document #" + Math.floor(Math.random()*1000),
+    userID: userID,
+    collaboratorIDs: [],
+    rawContent: {}
+  });
+  newDoc.save()
+  .then(function(doc){
+    callback(doc);
+  })
+  .catch(function(e) {
+    console.log("ERROR in function createNewDoc:", e);
+  });
+}
+
 module.exports = {
   saveDocument,
-  getDocList
+  getDocList,
+  getOneDoc,
+  createNewDoc
  };

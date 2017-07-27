@@ -43,7 +43,7 @@ class Login extends React.Component {
       if(response.data.success){
         self.props.history.push('/DocumentPortal');
       } else {
-        alert("Login unsuccessful! response: ", response);
+        alert("Login unsuccessful! \n response: " + response);
       };
     }).catch(function(e) {
         console.log('ERROR in function submitForm: ', e);
