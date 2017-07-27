@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+require('../styles/draft.css');
+
+
 class Landing extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +14,7 @@ class Landing extends React.Component {
   render() {
     return (
       <div>
-        <h2>Landing Page for Horizons Docs</h2>
+        <div className="landingTitle">Welcome to Horizons Docs</div>
         <ul>
           <li><Link to='/Login'>Login</Link></li>
           <li><Link to='/Register'>Register</Link></li>
