@@ -16,7 +16,7 @@ import { CompactPicker } from 'react-color';
 require('../styles/draft.css');
 
 const blockRenderMap = Immutable.Map({
-  'center': {
+  'center': { 
     element: 'center'
   },
   'unstyled': {

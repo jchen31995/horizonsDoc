@@ -35,12 +35,15 @@
     "webpack-dev-server": "^2.6.0"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.17.2",
     "connect-mongo": "^1.3.2",
     "cookie-parser": "^1.4.3",
     "draft-js": "^0.10.1",
     "express": "^4.15.3",
     "express-session": "^1.15.4",
+    "formsy-material-ui": "^0.6.2",
+    "formsy-react": "^0.19.5",
     "immutable": "^3.8.1",
     "material-ui": "^0.18.7",
     "mongoose": "^4.11.4",

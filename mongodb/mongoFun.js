@@ -18,11 +18,11 @@ const saveDocument = function(doc, callback) {
       	userID: doc.userID,
       	collaboratorIDs: doc.collaboratorIDs,
       	rawContent: doc.rawContent
-      })
-      return newDoc.save()
+      });
+      return newDoc.save();
     } else {
       return Document.findOneAndUpdate({title: doc.title}, {rawContent: doc.rawContent}).exec()
-    }
+    };
   })
   .then(function(mongoDoc) {
     callback(mongoDoc);
@@ -32,4 +32,17 @@ const saveDocument = function(doc, callback) {
   });
 };
 
-module.exports = { saveDocument };
+const getDocList = function(callback){
+  Document.find().exec()
+  .then(function(docList){
+    callback(docList);
+  })
+  .catch(function(e) {
+    console.log("ERROR in function getDocList:", e);
+  });
+}
+
+module.exports = {
+  saveDocument,
+  getDocList
+ };

@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Route } from 'react-router-dom'
+import { HashRouter, Route } from 'react-router-dom';
 
 import DocumentEditor from './components/DocumentEditor';
 import DocumentPortal from './components/DocumentPortal';
 import Login from './components/Login';
+import Landing from './components/Landing';
+import Register from './components/Register';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -28,10 +30,11 @@ class App extends React.Component {
     return (
       <HashRouter basename="/">
         <div>
-          <Route exact={true} path="/" component={DocumentEditor} />
+          <Route exact={true} path="/" component={Landing} />
           {/* <Route path="/DocumentEditor" component={DocumentEditor} /> */}
           <Route path="/DocumentPortal" component={DocumentPortal} />
           <Route path="/Login" component={Login} />
+          <Route path="/Register" component={Register} />
         </div>
       </HashRouter>
     );
@@ -39,7 +42,8 @@ class App extends React.Component {
 }
 
 
-ReactDOM.render(<MuiThemeProvider>
+ReactDOM.render(
+  <MuiThemeProvider>
     <App />
   </MuiThemeProvider>,
    document.getElementById('root'));
