@@ -1,7 +1,10 @@
+// npm packages
 import React from 'react';
-import MyEditor from './MyEditor';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import axios from 'axios';
 
+// components
+import MyEditor from './MyEditor';
 
 class DocumentEditor extends React.Component {
   constructor(props) {
@@ -22,12 +25,10 @@ class DocumentEditor extends React.Component {
     const newDoc = this.state.document;
     newDoc.rawContent = rawContent;
     this.setState({document: newDoc});
-    fetch('http://localhost:3000/updateDoc', {
+    axios({
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.document)
+            url: 'http://localhost:3000/updateDoc',
+            data: JSON.stringify(this.state.document)
     }).then(function(response) {
       return response.json()
     }).then(function(json) {

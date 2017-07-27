@@ -14,7 +14,7 @@ app.use(cookieParser());
 // mongodb
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
-const { User } = require('../models/models');
+const { User } = require('../mongodb/models');
 
 // passport
 var passport = require('./passportConfig');

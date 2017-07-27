@@ -1,6 +1,6 @@
 // react
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, hashHistory } from 'react-router-dom';
 
 // log in form and components
 import Formsy from 'formsy-react';
@@ -13,7 +13,7 @@ import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup,
 // axios
 import axios from 'axios';
 
-class Login extends React.Component {
+class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,20 +35,21 @@ class Login extends React.Component {
 
   submitForm(data) {
     const self = this;
+    console.log("you just submitted data: ", JSON.stringify(data));
     axios({
       method: 'post',
-      url: 'http://localhost:3000/login',
+      url: 'http://localhost:3000/signup',
       data: data
     }).then(function(response) {
       if(response.data.success){
-        self.props.history.push('/DocumentPortal');
+        self.props.history.push('/Login');
       } else {
-        alert("Login unsuccessful! response: ", response);
+        alert("Registration unsuccessful!", response.data.error);
       };
     }).catch(function(e) {
         console.log('ERROR in function submitForm: ', e);
     });
-};
+  };
 
   notifyFormError(data) {
     alert('Form error:', data);
@@ -56,10 +57,9 @@ class Login extends React.Component {
 
 
   render() {
-
     return (
       <div>
-        <h2>Login</h2>
+        <h2>Register</h2>
         <Link to='/'>Back to Home</Link>
         <Paper style={{
                 width: 300,
@@ -88,7 +88,7 @@ class Login extends React.Component {
             <RaisedButton
               style={{marginTop: 32}}
               type="submit"
-              label="Login"
+              label="Register"
               disabled={!this.state.canSubmit}
             />
           </Formsy.Form>
@@ -98,4 +98,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default Register;
