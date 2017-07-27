@@ -16,7 +16,7 @@ import { CompactPicker } from 'react-color';
 require('../styles/draft.css');
 
 const blockRenderMap = Immutable.Map({
-  'center': { 
+  'center': {
     element: 'center'
   },
   'unstyled': {
@@ -56,6 +56,15 @@ class MyEditor extends React.Component {
       styleMap: {} 
     };
     this.onChange = (editorState) => {this.setState({editorState});}
+  };
+
+  componentWillMount() {
+    const self = this;
+    try {
+      this.setState({editorState: EditorState.createWithContent(self.props.contentState)});
+    } catch(e) {
+      console.log("error: ", e);
+    };
   };
 
   _onSaveClick(){

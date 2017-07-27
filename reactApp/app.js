@@ -31,10 +31,11 @@ class App extends React.Component {
       <HashRouter basename="/">
         <div>
           <Route exact={true} path="/" component={Landing} />
-          {/* <Route path="/DocumentEditor" component={DocumentEditor} /> */}
+          <Route path="/editDoc/:docID" component={DocumentEditor} />
           <Route path="/DocumentPortal" component={DocumentPortal} />
           <Route path="/Login" component={Login} />
           <Route path="/Register" component={Register} />
+          <Route path="/createNewDoc" component={DocumentEditor} />
         </div>
       </HashRouter>
     );

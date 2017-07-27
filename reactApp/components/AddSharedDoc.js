@@ -57,6 +57,7 @@ class AddSharedDoc extends React.Component {
             floatingLabelText="Add Shared Document"
           />
           <RaisedButton
+            primary={true}
             type="submit"
             label="Add"
           />

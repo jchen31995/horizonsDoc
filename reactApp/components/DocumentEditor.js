@@ -2,6 +2,7 @@
 import React from 'react';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 // components
 import MyEditor from './MyEditor';
@@ -10,29 +11,68 @@ class DocumentEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      document: {
-        _id: "5977b384a943ca3e78a7112a",
-        title: "sampleDocument",
-        userID: "abcdefghijklmnopqrstuvwxyz",
-        collaboratorIDs: [],
-        rawContent: {}
-      }
+      _id: "",
+      title: "",
+      userID: "",
+      collaboratorIDs: [],
+      rawContent: {}
     };
   };
 
-  saveDoc(contentState){
-    const rawContent = convertToRaw(contentState);
-    const newDoc = this.state.document;
-    newDoc.rawContent = rawContent;
-    this.setState({document: newDoc});
+  createNewDoc() {
+    const self = this;
+    axios({
+      method: 'get',
+      url: 'http://localhost:3000/createNewDoc'
+    }).then(function(response) {
+      if(response.data.success){
+        self.loadExistingDoc(response.data.doc._id);
+      } else {
+        console.log("create new document unsuccessful!");
+      };
+    }).catch(function(e) {
+        console.log('ERROR in function createNewDoc: ', e);
+    });
+  };
+
+  loadExistingDoc(docID) {
+    const self = this;
+    axios({
+      method: 'get',
+      url: 'http://localhost:3000/editDoc',
+      params: {docID}
+    }).then(function(response) {
+      if(response.data.success){
+        self.setState(response.data.doc);
+      } else {
+        alert("unsuccessful");
+      };
+    }).catch(function(e) {
+        console.log('ERROR in function componentDidMount: ', e);
+    });
+  };
+
+
+  componentWillMount() {
+    const self = this;
+    if(this.props.location.pathname.split('/')[1] === 'createNewDoc') {
+      self.createNewDoc();
+    } else {
+      const docID = this.props.location.pathname.split('/')[2];
+      self.loadExistingDoc(docID);
+    };
+  };
+
+  saveDoc(contentState) {
+    const newDoc = this.state;
+    newDoc.rawContent = convertToRaw(contentState);
+    this.setState(newDoc);
     axios({
             method: 'POST',
             url: 'http://localhost:3000/updateDoc',
-            data: JSON.stringify(this.state.document)
+            data: this.state
     }).then(function(response) {
-      return response.json()
-    }).then(function(json) {
-        console.log("save successful! JSON response:", json);
+        console.log("response.data", response.data);
     }).catch(function(e) {
         console.log('ERROR in function saveDoc: ', e);
     });
@@ -42,12 +82,15 @@ class DocumentEditor extends React.Component {
     return (
       <div>
         <h1>This is the text editor</h1>
-        <p>Sharable documentID: {this.state.document._id}</p>
-        <p>Collaborators: {this.state.document.collaboratorIDs.toString()}</p>
-        <MyEditor saveDoc={this.saveDoc.bind(this)} />
+        <Link to='/DocumentPortal'>Back to Portal</Link>
+        <p>Sharable documentID: {this.state._id}</p>
+        <p>Collaborators: {this.state.collaboratorIDs.toString()}</p>
+        <MyEditor
+          rawContent={this.state.rawContent}
+          saveDoc={this.saveDoc.bind(this)} />
       </div>
     );
-  }
-}
+  };
+};
 
 export default DocumentEditor;
