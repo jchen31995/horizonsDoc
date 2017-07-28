@@ -90,6 +90,7 @@ class Login extends React.Component {
               type="submit"
               label="Login"
               disabled={!this.state.canSubmit}
+              primary={true}
             />
           </Formsy.Form>
         </Paper>

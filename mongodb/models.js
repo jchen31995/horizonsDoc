@@ -15,7 +15,7 @@ var documentSchema = mongoose.Schema({
 	title: String,
 	userID: String,
 	collaboratorIDs: Array,
-	rawContent: Object
+	rawContent: String
 });
 
 // mongodb models
