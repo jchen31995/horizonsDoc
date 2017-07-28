@@ -10,7 +10,7 @@ const { User, Document } = require('./models');
 
 // mongodb functions
 const saveDocument = function(doc, callback) {
-  Document.findOne({title: doc.title}).exec()
+  Document.findById(doc._id).exec()
   .then(function(mongoDoc) {
     if(!mongoDoc){
       const newDoc = new Document({
@@ -21,7 +21,7 @@ const saveDocument = function(doc, callback) {
       });
       return newDoc.save();
     } else {
-      return Document.findOneAndUpdate({title: doc.title}, {rawContent: doc.rawContent}).exec()
+      return Document.findOneAndUpdate({_id: doc._id}, {rawContent: doc.rawContent}).exec()
     };
   })
   .then(function(mongoDoc) {
@@ -52,12 +52,12 @@ const getOneDoc = function(docID, callback){
   });
 }
 
-const createNewDoc = function(userID, callback){
+const createNewDoc = function(userID, emptyRawContent, callback){
   const newDoc = new Document({
     title: "new document #" + Math.floor(Math.random()*1000),
     userID: userID,
     collaboratorIDs: [],
-    rawContent: {}
+    rawContent: emptyRawContent
   });
   newDoc.save()
   .then(function(doc){

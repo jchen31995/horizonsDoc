@@ -3,8 +3,6 @@ import React from 'react';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import io from 'socket.io-client'
-
 // components
 import MyEditor from './MyEditor';
 
@@ -16,12 +14,8 @@ class DocumentEditor extends React.Component {
       title: "",
       userID: "",
       collaboratorIDs: [],
-      rawContent: {}
+      rawContent: "{}"
     };
-
-    // this.socket = io('http://localhost:3000');
-    //
-    // this.socket.emit('join', {doc: this.props.match.params.docID});
   };
 
   createNewDoc() {
@@ -70,14 +64,14 @@ class DocumentEditor extends React.Component {
 
   saveDoc(contentState) {
     const newDoc = this.state;
-    newDoc.rawContent = convertToRaw(contentState);
+    newDoc.rawContent = JSON.stringify(convertToRaw(contentState));
     this.setState(newDoc);
     axios({
             method: 'POST',
             url: 'http://localhost:3000/updateDoc',
             data: this.state
     }).then(function(response) {
-        console.log("response.data", response.data);
+        alert(response.data.title + " is saved successfully!")
     }).catch(function(e) {
         console.log('ERROR in function saveDoc: ', e);
     });
@@ -90,10 +84,14 @@ class DocumentEditor extends React.Component {
         <Link to='/DocumentPortal'>Back to Portal</Link>
         <p>Sharable documentID: {this.state._id}</p>
         <p>Collaborators: {this.state.collaboratorIDs.toString()}</p>
-        <MyEditor
-          rawContent={this.state.rawContent}
-          saveDoc={this.saveDoc.bind(this)}
-        />
+        {(JSON.parse(this.state.rawContent) && JSON.parse(this.state.rawContent).blocks)?
+          <MyEditor
+            documentID = {this.props.match.params.docID}
+            rawContent={JSON.parse(this.state.rawContent)}
+            saveDoc={this.saveDoc.bind(this)} />
+            :
+            <div></div>
+        }
       </div>
     );
   };

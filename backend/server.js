@@ -46,11 +46,20 @@ app.use((req, res, next) => {
 });
 
 //sockets
-// io.on('connection', socket => {
-//   socket.on('join', ({doc}) => {
-//     console.log('join', doc);
-//   })
-// })
+io.on('connection', socket => {
+  socket.on('join', ({doc}) => {
+    console.log('join', doc);
+    socket.emit('helloBack', { doc });
+
+    socket.join(doc)
+    socket.room = doc;
+    socket.broadcast.to(doc).emit('userJoined');
+  })
+
+  socket.on('newContent', rawContent => {
+    socket.broadcast.to(socket.room).emit('receiveContent', rawContent);
+  })
+})
 // routes
 const routes = require('./routes');
 app.use('/', routes);

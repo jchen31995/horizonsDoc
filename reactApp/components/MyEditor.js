@@ -1,5 +1,5 @@
 import React from 'react';
-import {Editor, EditorState, RichUtils, Modifier, DefaultDraftBlockRenderMap} from 'draft-js';
+import {Editor, EditorState, RichUtils, Modifier, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw} from 'draft-js';
 import Immutable from 'immutable';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 import * as colors from 'material-ui/styles/colors';
@@ -7,6 +7,8 @@ import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
+import io from 'socket.io-client';
+
 
 import { CompactPicker } from 'react-color';
 // console.log(Dropdown.DropdownTrigger);
@@ -53,15 +55,48 @@ class MyEditor extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(),
       currFontSize: 8,
-      styleMap: {} 
+      styleMap: {}
     };
-    this.onChange = (editorState) => {this.setState({editorState});}
+
+    this.socket = io('http://localhost:3000');
+
+    this.socket.on('helloBack', ({doc}) => {
+      console.log('you just joined', doc);
+    })
+
+    this.socket.on('userJoined', () => {
+      console.log('user joined');
+    })
+
+    this.socket.on('userLeft', () => {
+      console.log('user left');
+    })
+
+    this.socket.on('receiveContent', rawContent => {
+      const contentState = convertFromRaw(JSON.stringify(rawContent));
+      console.log(contentState, typeof contentState);
+      const newEditState = EditorState.createWithContent(contentState);
+      this.setState({ editorState: newEditState });
+    })
+
+    this.socket.emit('join', {doc: this.props.documentID});
+
+    this.onChange = (editorState) => {
+      const contentState = editorState.getCurrentContent();
+      const rawContent = JSON.stringify(convertToRaw(contentState));
+      console.log(rawContent);
+      this.socket.emit('newContent', rawContent);
+      this.setState({
+        editorState
+      });
+    };
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const self = this;
     try {
-      this.setState({editorState: EditorState.createWithContent(self.props.contentState)});
+      const contentstate = convertFromRaw(self.props.rawContent);
+      this.setState({editorState: EditorState.createWithContent(contentstate)});
     } catch(e) {
       console.log("error: ", e);
     };
@@ -72,6 +107,9 @@ class MyEditor extends React.Component {
     this.props.saveDoc(contentState);
   }
 
+  componentWillUnmount(){
+    this.socket.disconnect();
+  }
   toggleColorPicker(e) {
     this.setState({
       colorPickerOpen: true,
