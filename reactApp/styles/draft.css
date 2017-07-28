@@ -3,6 +3,14 @@
 }
 
 
+.landingTitle {
+  text-align: center;
+  font-family: 'Apple Chancery', 'cursive';
+  font-size: 200%;
+  font-weight: bold;
+}
+
+
 .textBox {
   width: 480px;
   margin: 0 auto;

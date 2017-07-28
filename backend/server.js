@@ -1,6 +1,6 @@
 // express server
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 
 // body-parser
 const bodyParser = require('body-parser');
@@ -8,19 +8,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // cookie-parser
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 // mongodb
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
 const { User } = require('../mongodb/models');
 
 // passport
-var passport = require('./passportConfig');
-var session = require('express-session');
-var auth = require('./auth');
-var MongoStore = require('connect-mongo')(session);
+const passport = require('./passportConfig');
+const session = require('express-session');
+const auth = require('./auth');
+const MongoStore = require('connect-mongo')(session);
+
+//sockets
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 app.use(session({
     secret: process.env.PASSPORT_SECRET,
@@ -41,10 +45,25 @@ app.use((req, res, next) => {
   return next();
 });
 
+//sockets
+io.on('connection', socket => {
+  socket.on('join', ({doc}) => {
+    console.log('join', doc);
+    socket.emit('helloBack', { doc });
+
+    socket.join(doc)
+    socket.room = doc;
+    socket.broadcast.to(doc).emit('userJoined');
+  })
+
+  socket.on('newContent', rawContent => {
+    socket.broadcast.to(socket.room).emit('receiveContent', rawContent);
+  })
+})
 // routes
-var routes = require('./routes');
+const routes = require('./routes');
 app.use('/', routes);
 
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log('Backend server for Electron App running on port 3000!')
 });

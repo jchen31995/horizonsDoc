@@ -3,7 +3,6 @@ import React from 'react';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
 // components
 import MyEditor from './MyEditor';
 
@@ -87,6 +86,7 @@ class DocumentEditor extends React.Component {
         <p>Collaborators: {this.state.collaboratorIDs.toString()}</p>
         {(JSON.parse(this.state.rawContent) && JSON.parse(this.state.rawContent).blocks)?
           <MyEditor
+            documentID = {this.props.match.params.docID}
             rawContent={JSON.parse(this.state.rawContent)}
             saveDoc={this.saveDoc.bind(this)} />
             :
