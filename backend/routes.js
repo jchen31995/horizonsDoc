@@ -2,6 +2,9 @@ var router = require('express').Router();
 var { User } = require('../mongodb/models');
 var { saveDocument, getDocList, getOneDoc, createNewDoc } = require('../mongodb/mongoFun');
 
+var { convertToRaw, EditorState } = require('draft-js');
+
+
 router.get('/', function (req, res) {
   res.send('Hello World!');
 });
@@ -31,9 +34,9 @@ router.get('/editDoc', function (req, res) {
 });
 
 router.get('/createNewDoc', function (req, res) {
-  console.log("req.user: ", req.user);
   const userID = req.user._id;
-  createNewDoc(userID, function(doc){
+  const emptyRawContent = JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()));
+  createNewDoc(userID, emptyRawContent, function(doc){
     res.json({
       success: true,
       doc

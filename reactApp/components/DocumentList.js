@@ -15,7 +15,7 @@ class DocumentList extends React.Component {
     };
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const self = this;
     axios({
       method: 'get',

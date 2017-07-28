@@ -88,6 +88,7 @@ class Register extends React.Component {
               style={{marginTop: 32}}
               type="submit"
               label="Register"
+              primary={true}
               disabled={!this.state.canSubmit}
             />
           </Formsy.Form>

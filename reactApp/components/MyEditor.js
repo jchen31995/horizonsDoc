@@ -1,5 +1,5 @@
 import React from 'react';
-import {Editor, EditorState, RichUtils, Modifier, DefaultDraftBlockRenderMap} from 'draft-js';
+import {Editor, EditorState, RichUtils, Modifier, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw} from 'draft-js';
 import Immutable from 'immutable';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 import * as colors from 'material-ui/styles/colors';
@@ -61,7 +61,8 @@ class MyEditor extends React.Component {
   componentWillMount() {
     const self = this;
     try {
-      this.setState({editorState: EditorState.createWithContent(self.props.contentState)});
+      const contentstate = convertFromRaw(self.props.rawContent);
+      this.setState({editorState: EditorState.createWithContent(contentstate)});
     } catch(e) {
       console.log("error: ", e);
     };
