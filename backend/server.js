@@ -56,8 +56,8 @@ io.on('connection', socket => {
     socket.broadcast.to(doc).emit('userJoined');
   })
 
-  socket.on('newContent', rawContent => {
-    socket.broadcast.to(socket.room).emit('receiveContent', rawContent);
+  socket.on('newContent', strContent => {
+    socket.broadcast.to(socket.room).emit('receiveContent', strContent);
   })
 })
 // routes
