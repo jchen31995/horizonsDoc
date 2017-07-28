@@ -73,7 +73,7 @@ class MyEditor extends React.Component {
     })
 
     this.socket.on('receiveContent', strContent => {
-      const contentState = convertFromRaw(strContent);
+      const contentState = convertFromRaw(JSON.parse(strContent));
       const newEditState = EditorState.createWithContent(contentState);
       this.setState({ editorState: newEditState });
     })
@@ -82,7 +82,7 @@ class MyEditor extends React.Component {
 
     this.onChange = (editorState) => {
       const contentState = editorState.getCurrentContent();
-      const strContent = convertToRaw(contentState);
+      const strContent = JSON.stringify(convertToRaw(contentState));
       this.socket.emit('newContent', strContent);
       this.setState({
         editorState
