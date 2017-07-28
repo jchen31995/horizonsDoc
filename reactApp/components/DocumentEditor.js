@@ -3,6 +3,7 @@ import React from 'react';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import io from 'socket.io-client'
 
 // components
 import MyEditor from './MyEditor';
@@ -17,6 +18,10 @@ class DocumentEditor extends React.Component {
       collaboratorIDs: [],
       rawContent: {}
     };
+
+    // this.socket = io('http://localhost:3000');
+    //
+    // this.socket.emit('join', {doc: this.props.match.params.docID});
   };
 
   createNewDoc() {
@@ -87,7 +92,8 @@ class DocumentEditor extends React.Component {
         <p>Collaborators: {this.state.collaboratorIDs.toString()}</p>
         <MyEditor
           rawContent={this.state.rawContent}
-          saveDoc={this.saveDoc.bind(this)} />
+          saveDoc={this.saveDoc.bind(this)}
+        />
       </div>
     );
   };
