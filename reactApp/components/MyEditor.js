@@ -72,9 +72,8 @@ class MyEditor extends React.Component {
       console.log('user left');
     })
 
-    this.socket.on('receiveContent', rawContent => {
-      const contentState = convertFromRaw(JSON.stringify(rawContent));
-      console.log(contentState, typeof contentState);
+    this.socket.on('receiveContent', strContent => {
+      const contentState = convertFromRaw(strContent);
       const newEditState = EditorState.createWithContent(contentState);
       this.setState({ editorState: newEditState });
     })
@@ -83,9 +82,8 @@ class MyEditor extends React.Component {
 
     this.onChange = (editorState) => {
       const contentState = editorState.getCurrentContent();
-      const rawContent = JSON.stringify(convertToRaw(contentState));
-      console.log(rawContent);
-      this.socket.emit('newContent', rawContent);
+      const strContent = convertToRaw(contentState);
+      this.socket.emit('newContent', strContent);
       this.setState({
         editorState
       });
@@ -109,6 +107,7 @@ class MyEditor extends React.Component {
 
   componentWillUnmount(){
     this.socket.disconnect();
+    console.log(this.socket);
   }
   toggleColorPicker(e) {
     this.setState({
